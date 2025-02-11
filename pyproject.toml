@@ -1,10 +1,12 @@
 [project]
-name = "project-template"
+name = "aa-data-hanlder"
 version = "0.1.0"
-description = "Add your description here"
+description = "Handles data for the AA project"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "matplotlib>=3.10.0",
+    "pandas>=2.2.3",
     "pytest>=8.3.4",
 ]
 

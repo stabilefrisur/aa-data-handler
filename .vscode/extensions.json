@@ -8,5 +8,7 @@
         "tamasfe.even-better-toml",
         "aaron-bond.better-comments",
         "github.vscode-github-actions",
+        "ms-toolsai.datawrangler",
+        "analytic-signal.snippets-plotly"
     ]
 }

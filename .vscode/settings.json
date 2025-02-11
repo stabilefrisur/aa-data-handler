@@ -1,6 +1,9 @@
 {
     // Python settings
     "python.analysis.autoSearchPaths": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none"
+    },
     "python.analysis.extraPaths": [
         "${workspaceFolder}/src"
     ],
