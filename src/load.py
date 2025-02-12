@@ -1,16 +1,10 @@
 import pandas as pd
 import pickle
 from pathlib import Path
-import logging
+from logger import get_action_logger
 
 # General logger for actions
-action_logger = logging.getLogger('action_logger')
-action_handler = logging.StreamHandler()
-action_handler.setLevel(logging.INFO)
-action_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-action_handler.setFormatter(action_formatter)
-action_logger.addHandler(action_handler)
-action_logger.propagate = False  # Disable propagation
+action_logger = get_action_logger('action_logger')
 
 def load(      
         name: str = None, 

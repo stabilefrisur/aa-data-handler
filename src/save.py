@@ -2,28 +2,16 @@ import pandas as pd
 import pickle
 from pathlib import Path
 import matplotlib.pyplot as plt
-import logging
 import uuid
 from datetime import datetime
 from constants import TIMESTAMP_FORMAT
+from logger import get_action_logger, get_file_logger
 
 # Logger for file log
-file_logger = logging.getLogger('file_logger')
-file_handler = logging.FileHandler('file_log.log')
-file_handler.setLevel(logging.INFO)
-file_formatter = logging.Formatter('%(message)s')
-file_handler.setFormatter(file_formatter)
-file_logger.addHandler(file_handler)
-file_logger.propagate = False  # Disable propagation
+file_logger = get_file_logger('file_logger')
 
 # General logger for actions
-action_logger = logging.getLogger('action_logger')
-action_handler = logging.StreamHandler()
-action_handler.setLevel(logging.INFO)
-action_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-action_handler.setFormatter(action_formatter)
-action_logger.addHandler(action_handler)
-action_logger.propagate = False  # Disable propagation
+action_logger = get_action_logger('action_logger')
 
 def save(
         obj: pd.DataFrame | pd.Series | dict | plt.Figure, 

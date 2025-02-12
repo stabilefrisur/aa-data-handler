@@ -1,13 +1,13 @@
 import pandas as pd
 from pathlib import Path
-import logging
 
-# Adjust the import statements
+from logger import get_action_logger
 from save import save
 from load import load
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    action_logger = get_action_logger('action_logger')
+    action_logger.info("Starting main function")
     
     # Create a DataFrame
     df = pd.DataFrame({
