@@ -3,72 +3,97 @@ import pickle
 from pathlib import Path
 import matplotlib.pyplot as plt
 import logging
+import uuid
+from datetime import datetime
+from constants import TIMESTAMP_FORMAT
 
-logging.basicConfig(level=logging.INFO)
+# Logger for file log
+file_logger = logging.getLogger('file_logger')
+file_handler = logging.FileHandler('file_log.log')
+file_handler.setLevel(logging.INFO)
+file_formatter = logging.Formatter('%(message)s')
+file_handler.setFormatter(file_formatter)
+file_logger.addHandler(file_handler)
+file_logger.propagate = False  # Disable propagation
+
+# General logger for actions
+action_logger = logging.getLogger('action_logger')
+action_handler = logging.StreamHandler()
+action_handler.setLevel(logging.INFO)
+action_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+action_handler.setFormatter(action_formatter)
+action_logger.addHandler(action_handler)
+action_logger.propagate = False  # Disable propagation
 
 def save(
         obj: pd.DataFrame | pd.Series | dict | plt.Figure, 
         name: str, 
-        format: str, 
-        path: Path | str
-        ):
+        file_format: str, 
+        file_path: Path | str,
+        add_timestamp: bool = True
+        ) -> None:
     """Save a DataFrame, Series, dictionary, or Figure to a file.
 
     Args:
         obj (pd.DataFrame | pd.Series | dict | plt.Figure): Object to save.
         name (str): File name.
-        format (str): File format. Supported formats are 'csv', 'xlsx', 'pickle', 'png', and 'svg'.
-        path (Path | str): File path.
+        file_format (str): File format. Supported formats are 'csv', 'xlsx', 'pickle', 'png', and 'svg'.
+        file_path (Path | str): File path.
+        add_timestamp (bool): Whether to add a timestamp to the file name.
 
     Raises:
         TypeError: If the object type is not supported.
         ValueError: If the format is not supported.
     """
-    path = Path(path)
+    path = Path(file_path)
     path.mkdir(parents=True, exist_ok=True)  # Ensure the path exists
-    extension = 'p' if format == 'pickle' else format
+    extension = 'p' if file_format == 'pickle' else file_format
+    timestamp = datetime.now().strftime(TIMESTAMP_FORMAT)
+    name = f"{timestamp}_{name}" if add_timestamp else name
     full_path = path / f"{name}.{extension}"
     
-    logging.info(f"Saving {type(obj).__name__} as {format} to {full_path}")
+    log_id = uuid.uuid4()
+    file_logger.info(f"{log_id},{timestamp},{full_path}")
+    action_logger.info(f"Saving {type(obj).__name__} as {file_format} to {full_path}")
 
     if isinstance(obj, pd.DataFrame):
-        _save_dataframe(obj, full_path, format)
+        _save_dataframe(obj, full_path, file_format)
     elif isinstance(obj, pd.Series):
-        _save_series(obj, full_path, format)
+        _save_series(obj, full_path, file_format)
     elif isinstance(obj, dict):
         _save_dict(obj, full_path)
     elif isinstance(obj, plt.Figure):
-        _save_figure(obj, full_path, format)
+        _save_figure(obj, full_path, file_format)
     else:
         raise TypeError("Unsupported object type")
 
-def _save_dataframe(df: pd.DataFrame, full_path: Path, format: str):
-    if format == 'csv':
+def _save_dataframe(df: pd.DataFrame, full_path: Path, file_format: str) -> None:
+    if file_format == 'csv':
         df.to_csv(full_path, index=False)
-    elif format == 'xlsx':
+    elif file_format == 'xlsx':
         df.to_excel(full_path, index=False)
-    elif format == 'pickle':
+    elif file_format == 'pickle':
         with open(full_path, 'wb') as f:
             pickle.dump(df, f)
     else:
-        raise ValueError(f"Unsupported format for DataFrame: {format}")
+        raise ValueError(f"Unsupported format for DataFrame: {file_format}")
     
-    logging.info(f"DataFrame saved to {full_path}")
+    action_logger.info(f"DataFrame saved to {full_path}")
 
-def _save_series(series: pd.Series, full_path: Path, format: str):
-    if format == 'csv':
+def _save_series(series: pd.Series, full_path: Path, file_format: str) -> None:
+    if file_format == 'csv':
         series.to_csv(full_path, index=False)
-    elif format == 'xlsx':
+    elif file_format == 'xlsx':
         series.to_frame().to_excel(full_path, index=False)
-    elif format == 'pickle':
+    elif file_format == 'pickle':
         with open(full_path, 'wb') as f:
             pickle.dump(series, f)
     else:
-        raise ValueError(f"Unsupported format for Series: {format}")
+        raise ValueError(f"Unsupported format for Series: {file_format}")
     
-    logging.info(f"Series saved to {full_path}")
+    action_logger.info(f"Series saved to {full_path}")
 
-def _save_dict(d: dict, full_path: Path):
+def _save_dict(d: dict, full_path: Path) -> None:
     if all(isinstance(v, (pd.DataFrame, pd.Series, dict)) for v in d.values()):
         with pd.ExcelWriter(full_path) as writer:
             for key, value in d.items():
@@ -82,12 +107,12 @@ def _save_dict(d: dict, full_path: Path):
     else:
         raise ValueError("All values in the dictionary must be DataFrame, Series, or nested dictionaries")
     
-    logging.info(f"Dictionary saved to {full_path}")
+    action_logger.info(f"Dictionary saved to {full_path}")
 
-def _save_figure(fig: plt.Figure, full_path: Path, format: str):
-    if format in ['png', 'svg']:
+def _save_figure(fig: plt.Figure, full_path: Path, file_format: str) -> None:
+    if file_format in ['png', 'svg']:
         fig.savefig(full_path)
     else:
-        raise ValueError(f"Unsupported format for Figure: {format}")
+        raise ValueError(f"Unsupported format for Figure: {file_format}")
     
-    logging.info(f"Figure saved to {full_path}")
+    action_logger.info(f"Figure saved to {full_path}")

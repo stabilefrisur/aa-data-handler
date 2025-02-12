@@ -18,8 +18,8 @@ def main():
     # Save the DataFrame to a CSV file
     save(df, 'data', 'csv', Path('data'))
     
-    # Load the CSV file into a DataFrame
-    loaded_df = load('data', 'csv', Path('data'))
+    # Load the latest file in the log
+    loaded_df = load(name='data')
     
     # Print the loaded DataFrame
     print(loaded_df)
