@@ -15,7 +15,7 @@ action_logger = get_action_logger('action_logger')
 
 def save(
         obj: pd.DataFrame | pd.Series | dict | plt.Figure, 
-        name: str, 
+        file_name: str, 
         file_format: str, 
         file_path: Path | str,
         add_timestamp: bool = True
@@ -24,9 +24,9 @@ def save(
 
     Args:
         obj (pd.DataFrame | pd.Series | dict | plt.Figure): Object to save.
-        name (str): File name.
+        file_name (str): File name without extension.
         file_format (str): File format. Supported formats are 'csv', 'xlsx', 'pickle', 'png', and 'svg'.
-        file_path (Path | str): File path.
+        file_path (Path | str): Directory path where the file will be saved.
         add_timestamp (bool): Whether to add a timestamp to the file name.
 
     Raises:
@@ -37,8 +37,8 @@ def save(
     path.mkdir(parents=True, exist_ok=True)  # Ensure the path exists
     extension = 'p' if file_format == 'pickle' else file_format
     timestamp = datetime.now().strftime(TIMESTAMP_FORMAT)
-    name = f"{timestamp}_{name}" if add_timestamp else name
-    full_path = path / f"{name}.{extension}"
+    file_name = f"{timestamp}_{file_name}" if add_timestamp else file_name
+    full_path = path / f"{file_name}.{extension}"
     
     log_id = uuid.uuid4()
     file_logger.info(f"{log_id},{timestamp},{full_path}")

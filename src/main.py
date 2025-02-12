@@ -16,10 +16,10 @@ def main():
     })
     
     # Save the DataFrame to a CSV file
-    save(df, 'data', 'csv', Path('data'))
+    save(df, 'data', 'csv', Path('sample_data'))
     
     # Load the latest file in the log
-    loaded_df = load(name='data')
+    loaded_df = load(file_name='data')
     
     # Print the loaded DataFrame
     print(loaded_df)
