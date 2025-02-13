@@ -15,7 +15,7 @@ You can save a DataFrame, Series, dictionary, or Figure to a file using the `sav
 ```python
 from pathlib import Path
 import pandas as pd
-from save import save
+from aa_data_handler import save
 
 # Create a DataFrame
 df = pd.DataFrame({
@@ -55,7 +55,7 @@ save(df, 'data', 'csv', Path('data'))
 ### Loading Data
 You can load a DataFrame, Series, or dictionary from a file using the `load` function:
 ```python
-from load import load
+from aa_data_handler import load
 
 # Load the latest file in the log
 loaded_df = load(name='data')

@@ -16,8 +16,8 @@ action_logger = get_action_logger('action_logger')
 def save(
         obj: pd.DataFrame | pd.Series | dict | plt.Figure, 
         file_name: str, 
-        file_format: str, 
-        file_path: Path | str,
+        file_format: str = 'pickle', 
+        file_path: Path | str = Path('output'),
         add_timestamp: bool = True
         ) -> None:
     """Save a DataFrame, Series, dictionary, or Figure to a file.
@@ -25,9 +25,9 @@ def save(
     Args:
         obj (pd.DataFrame | pd.Series | dict | plt.Figure): Object to save.
         file_name (str): File name without extension.
-        file_format (str): File format. Supported formats are 'csv', 'xlsx', 'pickle', 'png', and 'svg'.
-        file_path (Path | str): Directory path where the file will be saved.
-        add_timestamp (bool): Whether to add a timestamp to the file name.
+        file_format (str): File format. Supported formats are 'csv', 'xlsx', 'pickle', 'png', and 'svg'. Default is 'pickle'.
+        file_path (Path | str): Directory path where the file will be saved. Default is 'output'.
+        add_timestamp (bool): Whether to add a timestamp to the file name. Default is True.
 
     Raises:
         TypeError: If the object type is not supported.
