@@ -1,15 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "aa-data-hanlder"
+name = "aa-data-handler"
 version = "0.1.0"
-description = "Handles data for the AA project"
-readme = "README.md"
-requires-python = ">=3.10"
 dependencies = [
     "matplotlib>=3.10.0",
     "pandas>=2.2.3",
     "pytest>=8.3.4",
 ]
+requires-python = ">=3.10"
+authors = [
+    {name = "Stabile Frisur", email = "stabilefrisur@proton.me"},
+]
+description = "Handles data for the AA project"
+readme = "README.md"
+license = "MIT"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+repository = "https://github.com/stabilefrisur/aa-data-handler.git"
 
 [tool.pytest.ini_options]
 pythonpath = "src"
 testpaths = "tests"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aa_data_handler"]
