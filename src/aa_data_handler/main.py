@@ -1,9 +1,9 @@
 import pandas as pd
 from pathlib import Path
 
-from logger import get_action_logger
-from save import save
-from load import load
+from .logger import get_action_logger
+from .save import save
+from .load import load
 
 def main():
     action_logger = get_action_logger('action_logger')
